@@ -13,7 +13,6 @@
 table, th, td {
     border: 1px solid black;
 }
-
 </style>
 </head>
 <body>
@@ -112,7 +111,7 @@ if (isset($_POST['a'])) {
 ?>
 	<form action="calGrade.php" method="POST">
 		學生姓名:<input type="text" id="name" name="name"/><br />
-		學生學號:<input type="text"		//TODO排序 id="id" name="id"/><br />
+		學生學號:<input type="text" id="id" name="id"/><br />
 		email:<input type="text" id="email" name="email"/><br />
 		國文成績：<input type="text" id="chi" name="chi"/><br />
 		英文成績：<input type="text" id="eng" name="eng"/><br />
@@ -142,20 +141,19 @@ $(function(){
 			flag=false;
 			$('input[id^=na]').after("<span style=\"color:red\"> 名字格式錯誤</span>");
 		} 
-		if (idP.test($('#id').val())) {
+		if (!idP.test($('#id').val())) {
+			flag=false;
+			$('input[id^=id]').after("<span style=\"color:red\"> 學號格式錯誤</span>");
+		} else {
 			$.getJSON('gradeJson.php', function(data) {
 		        $.each(data, function(key, val) {
-					if ($('#id').val()===data[key]) {
+					if ($('#id').val()==data[key]) {
 						$('input[id^=id]').after("<span style=\"color:red\"> 檔案已經有該學號存在("+val+"),請換一個試試</span>");
 						flag=false;
 					} 	
 		        });
 			});
-		} else {
-			flag=false;
-			$('input[id^=id]').after("<span style=\"color:red\"> 學號格式錯誤</span>");
 		}
-		//TODO check action
 		if (!emailP.test($('#email').val())) {
 			flag=false;
 			$('input[id^=em]').after("<span style=\"color:red\"> email格式錯誤</span>");
@@ -186,5 +184,4 @@ $(function(){
 		return true;		
 	});
 })
-
 </script>
