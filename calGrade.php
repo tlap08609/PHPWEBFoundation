@@ -17,7 +17,6 @@ table, th, td {
 </style>
 </head>
 <body>
-
 <?php 
 if (isset($_POST['a'])) {
 	$fn = "grade.txt";
@@ -146,6 +145,7 @@ $(function(){
 			flag=false;
 			$('input[id^=id]').after("<span style=\"color:red\"> 學號格式錯誤</span>");
 		}
+		//TODO check action
 		if (!emailP.test($('#email').val())) {
 			flag=false;
 			$('input[id^=em]').after("<span style=\"color:red\"> email格式錯誤</span>");
