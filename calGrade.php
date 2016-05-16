@@ -44,7 +44,7 @@ if (isset($_POST['a'])) {
 			$total=0;$totalAvg=0;
 			echo "<table><thead><tr><th>流水號</th><th>名字</th><th>學號</th><th>email</th>
 				<th>國文</th><th>英文</th><th>數學</th><th>物理</th><th>化學</th>
-				<th>總分</th><th>平均分數</th>	</tr></thead><tbody>";
+				<th>總分</th><th>平均分數</th></tr></thead><tbody>";
 			if (sizeof($fna)==0) {
 				echo "<tr><td colspan='11' style='color:red;text-align:center;'>並無資料</td></tr>";
 			} else {
@@ -66,8 +66,44 @@ if (isset($_POST['a'])) {
 		}
 	}
 	if (($_POST['a']) == 3) {
-		//TODO排序
-		echo "<h1>排序</h1>";
+		if (file_exists($fn)) {
+			$student=array();
+			$allTotal=array();
+			$grade=array(0,0,0,0,0,0,0);
+			$count = 0;
+			$fna = file($fn);
+			if (sizeof($fna)>0) {
+				echo "<table><thead><tr><th>排名</th><th>名字</th><th>學號</th><th>email</th>
+				<th>國文</th><th>英文</th><th>數學</th><th>物理</th><th>化學</th>
+				<th>總分</th><th>平均分數</th></tr></thead><tbody>";
+				for ($i=0;$i<sizeof($fna);$i++) {
+					list($n,$id,$em,$c1,$e,$m,$p,$c2) = split(",",$fna[$i]);
+					$student[$id] = array($n,$id,$em,$c1,$e,$m,$p,$c2);
+					$allTotal[$id] = $c1+$e+$m+$p+$c2;
+				}
+				arsort($allTotal);
+				foreach ($allTotal as $k => $v){
+					$grade[0] += $student[$k][3];
+					$grade[1] += $student[$k][4];
+					$grade[2] += $student[$k][5];
+					$grade[3] += $student[$k][6];
+					$grade[4] += $student[$k][7];
+					$grade[5] += $v;
+					$grade[6] += number_format($v/5,2);
+					echo "<tr><td>".++$count."</td><td>".$student[$k][0]."</td><td>".$student[$k][1]."</td><td>".$student[$k][2]."</td>".
+							"<td>".redFont($student[$k][3])."</td><td>".redFont($student[$k][4])."</td><td>".redFont($student[$k][5])."</td><td>".redFont($student[$k][6])."</td><td>".redFont($student[$k][7])."</td>".
+							"<td>".$v."</td><td>".number_format($v/5,2)."</td></tr>";
+				}
+				echo "<tr><td colspan='4'>平均</td><td>".number_format($grade[0]/$count,2)."</td><td>".number_format($grade[1]/$count,2)."</td><td>".number_format($grade[2]/$count,2)."</td>".
+						"<td>".number_format($grade[3]/$count,2)."</td><td>".number_format($grade[4]/$count,2)."</td><td>".number_format($grade[5]/$count,2)."</td><td>".number_format($grade[6]/$count,2).
+						"</tr>";
+				echo "</tbody></table>";
+			} else {
+				echo "<h1>檔案無筆數</h1>";
+			}
+		} else {
+			echo "<h1>檔案不存在，請先建立檔案</h1>";
+		}
 	}
 	if (($_POST['a']) == 4) {
 		$fo = fopen($fn, "w");
@@ -77,7 +113,7 @@ if (isset($_POST['a'])) {
 ?>
 	<form action="calGrade.php" method="POST">
 		學生姓名:<input type="text" id="name" name="name"/><br />
-		學生學號:<input type="text" id="id" name="id"/><br />
+		學生學號:<input type="text"		//TODO排序 id="id" name="id"/><br />
 		email:<input type="text" id="email" name="email"/><br />
 		國文成績：<input type="text" id="chi" name="chi"/><br />
 		英文成績：<input type="text" id="eng" name="eng"/><br />
@@ -86,7 +122,7 @@ if (isset($_POST['a'])) {
 		化學成績:<input type="text" id="che" name="che"/><br />
 		<button id="submit" type="submit" name="a" value="1">登記</button>
 		<button type="submit" name="a" value="2">統計成績（按keyIn時間排序）</button>
-		<button type="submit" name="a" value="3">統計成績（按總分排名排序）</button>
+		<button type="submit" name="a" value="3">統計成績（按總分排名大到小排序並且有全班平均）</button>
 		<button type="submit" name="a" value="4">RESET</button>
 	</form>
 </body>
