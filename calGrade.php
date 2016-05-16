@@ -137,11 +137,21 @@ $(function(){
 		var emailP = /[\w\d]+@[\w]{1,}.[\w]{2,3}/;
 		var gradeP=/^[1-9][0-9]?$|^100$/;
 		$('span').remove();
+
 		if (!nameP.test($('#name').val())) {
 			flag=false;
 			$('input[id^=na]').after("<span style=\"color:red\"> 名字格式錯誤</span>");
 		} 
-		if (!idP.test($('#id').val())) {
+		if (idP.test($('#id').val())) {
+			$.getJSON('gradeJson.php', function(data) {
+		        $.each(data, function(key, val) {
+					if ($('#id').val()===data[key]) {
+						$('input[id^=id]').after("<span style=\"color:red\"> 檔案已經有該學號存在("+val+"),請換一個試試</span>");
+						flag=false;
+					} 	
+		        });
+			});
+		} else {
 			flag=false;
 			$('input[id^=id]').after("<span style=\"color:red\"> 學號格式錯誤</span>");
 		}
