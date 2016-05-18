@@ -123,12 +123,10 @@ if (isset($_POST['a'])) {
 		<button type="submit" name="a" value="3">統計成績（按總分排名大到小排序並且有全班平均）</button>
 		<button type="submit" name="a" value="4">RESET</button>
 	</form>
-</body>
-</html>
 <script>
 //chinese unicode
 //http://www.khngai.com/chinese/charmap/tbluni.php?page=0
-$(function(){
+(function($){
 	$('#submit').click(function(){
 		var flag=true;
 		var nameP = /[a-z\u4e00-\u9eff]{1,}/ ;
@@ -136,12 +134,18 @@ $(function(){
 		var emailP = /[\w\d]+@[\w]{1,}.[\w]{2,3}/;
 		var gradeP=/^[1-9][0-9]?$|^100$/;
 		$('span').remove();
-
-		if (!nameP.test($('#name').val())) {
+		if ($('#name').val()=='') {
+			flag=false;
+			$('input[id^=na]').after("<span style=\"color:red\"> 無輸入文字</span>");
+		} else if (!nameP.test($('#name').val())) {
 			flag=false;
 			$('input[id^=na]').after("<span style=\"color:red\"> 名字格式錯誤</span>");
 		} 
-		if (!idP.test($('#id').val())) {
+		
+		if ($('#id').val()=='') {
+			flag=false;
+			$('input[id^=id]').after("<span style=\"color:red\"> 無輸入文字</span>");
+		} else if (!idP.test($('#id').val())) {
 			flag=false;
 			$('input[id^=id]').after("<span style=\"color:red\"> 學號格式錯誤</span>");
 		} else {
@@ -154,27 +158,45 @@ $(function(){
 		        });
 			});
 		}
-		if (!emailP.test($('#email').val())) {
+		if ($('#email').val()=='') {
+			flag=false;
+			$('input[id^=em]').after("<span style=\"color:red\"> 無輸入文字</span>");
+		} else if (!emailP.test($('#email').val())) {
 			flag=false;
 			$('input[id^=em]').after("<span style=\"color:red\"> email格式錯誤</span>");
 		}
-		if (!gradeP.test($('#chi').val())) {
+		if ($('#chi').val()=='') {
+			flag=false;
+			$('input[id^=chi]').after("<span style=\"color:red\"> 無輸入文字</span>");
+		} else if (!gradeP.test($('#chi').val())) {
 			flag=false;
 			$('input[id^=chi]').after("<span style=\"color:red\"> 國文分數格式錯誤</span>");
 		}
-		if (!gradeP.test($('#eng').val())) {
+		if ($('#eng').val()=='') {
+			flag=false;
+			$('input[id^=eng]').after("<span style=\"color:red\"> 無輸入文字</span>");
+		} else if (!gradeP.test($('#eng').val())) {
 			flag=false;
 			$('input[id^=eng]').after("<span style=\"color:red\"> 英文分數格式錯誤</span>");
 		}
-		if (!gradeP.test($('#mat').val())) {
+		if ($('#mat').val()=='') {
+			flag=false;
+			$('input[id^=mat]').after("<span style=\"color:red\"> 無輸入文字</span>");
+		} else if (!gradeP.test($('#mat').val())) {
 			flag=false;
 			$('input[id^=mat]').after("<span style=\"color:red\"> 數學分數格式錯誤</span>");
 		}
-		if (!gradeP.test($('#phy').val())) {
+		if ($('#phy').val()=='') {
+			flag=false;
+			$('input[id^=phy]').after("<span style=\"color:red\"> 無輸入文字</span>");
+		} else if (!gradeP.test($('#phy').val())) {
 			flag=false;
 			$('input[id^=phy]').after("<span style=\"color:red\"> 物理分數格式錯誤</span>");
 		}
-		if (!gradeP.test($('#che').val())) {
+		if ($('#che').val()=='') {
+			flag=false;
+			$('input[id^=che]').after("<span style=\"color:red\"> 無輸入文字</span>");
+		} else if (!gradeP.test($('#che').val())) {
 			flag=false;
 			$('input[id^=che]').after("<span style=\"color:red\"> 化學分數格式錯誤</span>");
 		}
@@ -183,5 +205,7 @@ $(function(){
 		} 
 		return true;		
 	});
-})
+})(jQuery)
 </script>
+</body>
+</html>
